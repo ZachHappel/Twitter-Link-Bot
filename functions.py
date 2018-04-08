@@ -28,7 +28,7 @@ client = ImgurClient(connectToImgur.client_id, connectToImgur.client_secret)
 def load_all_new(bot):
     urls = []
     post_archive = []
-    all = bot.subreddit('twitterbottestarea')
+    all = bot.subreddit('all')
     for post in all.new(limit=15):
         test = post
         post_url = post.url
