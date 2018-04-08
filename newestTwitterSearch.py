@@ -4,12 +4,7 @@ import json
 from newTweepy import tweepySearch, parse_tweepy_response
 
 
-# found_tweet = (results[0])
-# json_str = json.dumps(found_tweet._json)
-# print(json_str.index('"id":'))
-# print(len('950826688732155904'))
-# tweet = (results[0])
-# print(tweet)
+
 
 
 
@@ -102,20 +97,3 @@ def find_tweet(username_combos, tweet_combos):
                     break
 
     return (cycle_combinations(username_combos, tweet_combos))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    # find_tweet(['Woody-See', 'WoodySee', 'Woody_See'], ['did u really short me a gram bro let me', 'did u really me a gram bro let me', 'did u really short me a gram bro me'])
-    # print(tweet['find'])
