@@ -33,13 +33,13 @@ class Imgur_Main:
         if ('imgur' in URL) or ('i.redd.it' in URL):
 
             if '.gif' in URL or '.mp4' in URL or '.mov' in URL or '.tiff' in URL or '.apng' in URL or '.gifv' in URL or '.webm' in URL:
-                print('None')
+                print('Incorrect file format')
                 return None
             else:
-                print('Passed')
+                print('Usable image')
                 return URL
         else:
-            print('None')
+            print('Link is not associated with supported images and or sites')
             return None
 
 

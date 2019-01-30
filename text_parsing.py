@@ -1,4 +1,3 @@
-from local_logging import Logging
 import enchant
 english_dict = enchant.Dict("en_US")
 
@@ -44,46 +43,34 @@ def parse_text(ocr_output):
                    print("Line B: "+comparable_line_b)
 
 
-
-
-
-
-
     def combine_line(spell_checked_line_list):
         combined = ''
         for x in range(0, len(spell_checked_line_list)):
             combined = combined + spell_checked_line_list[x]
-
-
         return combined
-
-
 
 
     def get_username(ocr_output):  # Finds username by searching for first '@' symbol in text
 
 
         for searching in range(0, len(ocr_output)):
-
             line = ocr_output[searching].split()
             print(str(line))
             for word in range(0, len(line)):
                 selected_word = line[word]
                 # print("This is selected word: " +selected_word)
                 if '@' in selected_word:
-                    print('a')
+                    print("@ found in image")
 
                     if len(selected_word) == 1:   #If standalone '@' is found, not associated with handle
-                        print('b')
-
+                        print('Unaccompanied @')
 
                     elif selected_word[len(selected_word)-1] == '@': #ex: Neil deGrasse Tyson@  @neiltyson
-                        print('c')
+                        print('@ at the end of word')
                         break
 
                     elif len(selected_word) < 4:                      #Minimum length is now four characters
                         break
-
 
                     else:
                         for letter in range(0, len(selected_word)):
@@ -152,7 +139,7 @@ def parse_text(ocr_output):
             all_words_good = True
             for word in range(0, len(words)):
                 if english_dict.check(words[word]):
-                    new_line = new_line + " "+ words[word]
+                   new_line = new_line + " "+ words[word]
                 else:
                     pass
             print("New Line: "+new_line)
@@ -165,9 +152,7 @@ def parse_text(ocr_output):
     def preCheckOfWordCount(spell_checked_list):
         print("Printing Words: ")
 
-
         for line in spell_checked_list:
-
             if len(line.split()) <=2 and len(spell_checked_list) == 1:
                 print("None")
                 return None
@@ -176,14 +161,9 @@ def parse_text(ocr_output):
                 return spell_checked_list
 
 
-
-
-    #Replace
     def get_search_terms(spell_checked):
         #Only use lines larger than or equal to three lines
-
         #Checking how many words are in the spell checked lines
-
         if len(spell_checked) >= 3:
             search_terms = spell_checked[0] + spell_checked[1]   # Combine two lines in order to (hopefully) increase odds of finding the tweet
         else:
@@ -196,11 +176,8 @@ def parse_text(ocr_output):
 
 
     def method_handler(split_text_tuple):    #Method initiated when function is called
-
         getUsername_output = get_username(split_text_tuple)
-
-        if getUsername_output is None:
-            return None
+        if getUsername_output is None: return None
         else:
             username_found_on_line = getUsername_output[1]
             username = getUsername_output[0]

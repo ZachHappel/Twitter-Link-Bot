@@ -1,90 +1,64 @@
 from __future__ import unicode_literals
 
 
-def get_screenname_variations(username, character):
-    combinations_to_return = []
+def createTwitterHandleVariations(twitter_handle):
+
+    twitter_handle_with_removed_illegal_characters = ''
+    twitter_handle_variation_list = []
 
 
-    def get_username_list():
-        username_list = []
-        for adding in range(0, len(username)):
-            if '.' == username[adding]:
-                pass
-            elif '@' == username[adding]:
-                pass
-            else:
-                username_list.append(username[adding])
-        return username_list
+    def splitTwitterHandleAndRemoveIllegalCharacters(): #Splits handle into a list and removes illegal characters
+        splitted_handle = []
+        for letter in twitter_handle:
+            if letter == '.' or letter == ',' or letter == '@': pass
+            elif letter == '-': splitted_handle.append('_')            #Assume OCR misinterpretation because
+            else: splitted_handle.append(letter)                              #          hyphens are illegal
+        twitter_handle_variation_list.append(''.join(splitted_handle)) #Adds to list with only modification being
+
+        return splitted_handle                                         #        the removal of illegal characters
 
 
+    def addUnderscore():
+        cleaned_twitter_handle = twitter_handle_variation_list[0].split()
+        cleaned_twitter_handle = cleaned_twitter_handle[0]
+        cleaned_twitter_handle_with_additions = []
+        for letter_index in range(0, len(cleaned_twitter_handle)):
+            letter = cleaned_twitter_handle[letter_index]
+            print("Letter: "+letter)
+            cleaned_twitter_handle_with_additions.append(letter)
+            if letter == '_' and cleaned_twitter_handle[letter_index-1] != '_' and letter_index+1 != len(cleaned_twitter_handle) and cleaned_twitter_handle[letter_index+1] != '_':   #Second conditional avoids inserting if it has
+                cleaned_twitter_handle_with_additions.append('_')                    # already been done, or if two already exist
 
-    def create_vars_add(char, count, username_list):    #Adding extra "-"/"_"
-        locations = []
-        to_add = char*count
-        modified_username_list = username_list
-        for search in range(0, len(username)):
-            if username[search] == char:
-                locations.append(search)
-        for location in range(0, len(locations)):
-            modified_username_list.insert(locations[location], to_add)
-        return modified_username_list
+        twitter_handle_variation_list.append(''.join(cleaned_twitter_handle_with_additions))
+        print("Final Add Underscore: "+ ''.join(cleaned_twitter_handle_with_additions))
 
+    def removeUnderscoreIfTwoArePresent():
+        cleaned_twitter_handle = twitter_handle_variation_list[0].split()
+        cleaned_twitter_handle = (str(cleaned_twitter_handle[0]))
+        cleaned_twitter_handle_with_removals = []
+        for letter_index in range(0, len(cleaned_twitter_handle)-1):
+            letter = cleaned_twitter_handle[letter_index]
+            print(letter)
+            if letter == '_' and letter_index+1 != len(cleaned_twitter_handle) and cleaned_twitter_handle[letter_index+1] == '_':
+                print('Here')
+                cleaned_twitter_handle_with_removals = cleaned_twitter_handle[:letter_index] + cleaned_twitter_handle[letter_index+1:]
+                twitter_handle_variation_list.append(''.join(cleaned_twitter_handle_with_removals))
+            if letter == '_' and cleaned_twitter_handle[letter_index-1] == '_' and letter_index == len(cleaned_twitter_handle)-1:
+                cleaned_twitter_handle_with_removals = cleaned_twitter_handle[:letter_index] + cleaned_twitter_handle[letter_index + 1:]
+                print("Splitted Handle With Removals: "+str(cleaned_twitter_handle_with_removals))
+                twitter_handle_variation_list.append(''.join(cleaned_twitter_handle_with_removals))
+                break
 
+    splitTwitterHandleAndRemoveIllegalCharacters()
+    handle_with_illegal_characters_removed = twitter_handle_variation_list[0]
+    if '_' in handle_with_illegal_characters_removed:
+        addUnderscore()
+        removeUnderscoreIfTwoArePresent()
 
-    def create_vars_sub(char, count, username_list):    #Subtracting extra "-"/"_"
-        locations = []
-
-
-        modified_username_list = username_list
-        for search in range(0, len(username)):
-            if username[search] == char:
-                locations.append(search)
-
-        for location in range(0, len(locations)):
-            modified_username_list.pop(locations[location])
-
-
-        return modified_username_list
-
-  #     Handling '-' '_' characters     #
-
-    #            Adding               #
-    username_list = get_username_list()
-    if character != ' ':
-        new_username_list = (create_vars_add(character, 1, username_list))
-        combination = ''.join(new_username_list)
-        combinations_to_return.append(combination)
-        new_username_list = (create_vars_add(character, 2, username_list))
-        combination = ''.join(new_username_list)
-        combinations_to_return.append(combination)
-        new_username_list = (create_vars_sub(character, 2, username_list))
-        combination = ''.join(new_username_list)
-        combinations_to_return.append(combination)
+    return twitter_handle_variation_list
 
 
 
-        #           Other               #
-    if username[len(username) - 1] == 'a':  # Creating combinations without the 'a' at the end
-        combinations_to_return.append(username)  # Some mobile screenshots will appear to have an 'a' at the end if verified symbol is present
-        for searching in range(0, len(combinations_to_return)):
-            selected_username = combinations_to_return[searching]
-            combinations_to_return.append(selected_username[:len(selected_username) - 1])
-    else:
-        pass
-
-    duplicates_removed = [username]
-
-    for x in range(0, len(combinations_to_return)):
-        combo = combinations_to_return[x]
-        if combo in duplicates_removed:
-            pass
-        else:
-            duplicates_removed.append(combo)
-
-    return duplicates_removed
-
-
-#print(get_screenname_variations("zach--happela"))
 
 
 def get_tweet_variations(tweet_text):
@@ -100,9 +74,16 @@ def get_tweet_variations(tweet_text):
     print("Tweet Text String: "+tweet_text_string)
 
 
-
     spell_checked = []
     combinations = []
+
+    full_phrase = ''
+    for word in splitted_line:
+        if word != ' ':
+            full_phrase = full_phrase + word +" "
+
+    combinations.append(full_phrase)
+
 
 
     def reset_list():   #Python was being difficult
@@ -124,6 +105,5 @@ def get_tweet_variations(tweet_text):
             pass
 
         combinations.append(' '.join(new_list))
-
 
     return (combinations)
